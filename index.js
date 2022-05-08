@@ -29,12 +29,23 @@ try{
     // console.log('object');
     await client.connect();
     const carCollection =client.db("carWarehouse").collection("warehouseProducts");
+    const latestNews =client.db("latestNews").collection("news");
+
+    
 
     app.get('/inventory',async(req,res)=>{
         const query = {};
-        const cursor = carCollection.find(query);
+        const cursor = latestNews.find(query);
         const products = await cursor.toArray();
         res.send(products);
+    })
+
+    // latest news 
+    app.get('/latestnews',async(req,res)=>{
+        const query = {};
+        const cursor = latestNews.find(query);
+        const news = await cursor.toArray();
+        res.send(news);
     })
     /* ====================== */
     app.get('/inventory/:id',async (req,res)=>{
@@ -52,15 +63,23 @@ try{
         res.send(result);
 
     })
-    /* =================put============== */
+    /*=============update user==================*/
     app.put('/inventory/:id', async (req,res)=>{
         const id = req.params.id;
         const updateQuantity= req.body;
         console.log(updateQuantity);
-        const query ={_id: ObjectId(id)};
-      
-        res.send(deleteItem);
+        const filter ={_id: ObjectId(id)};
+        const options = {upsert: true};
+        const updatedoc ={
+            $set:{
+                quantity: updateQuantity.quantity
+            }
+        };
+      const result = await carCollection.updateOne(filter,updatedoc,options)
+        res.send(result);
     })
+
+  
 
     /*===================Delete======================*/
 
@@ -88,7 +107,7 @@ run().catch(console.dir)
 
 
 app.get('/',(req,res)=>{
-    res.send('Server is runnig')
+    res.send('Server is running')
 })
 
 
