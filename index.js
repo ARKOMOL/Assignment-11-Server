@@ -29,23 +29,12 @@ try{
     // console.log('object');
     await client.connect();
     const carCollection =client.db("carWarehouse").collection("warehouseProducts");
-    const latestNews =client.db("latestNews").collection("news");
-
-    
 
     app.get('/inventory',async(req,res)=>{
         const query = {};
-        const cursor = latestNews.find(query);
+        const cursor = carCollection.find(query);
         const products = await cursor.toArray();
         res.send(products);
-    })
-
-    // latest news 
-    app.get('/latestnews',async(req,res)=>{
-        const query = {};
-        const cursor = latestNews.find(query);
-        const news = await cursor.toArray();
-        res.send(news);
     })
     /* ====================== */
     app.get('/inventory/:id',async (req,res)=>{
