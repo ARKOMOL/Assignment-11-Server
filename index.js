@@ -41,7 +41,7 @@ try{
         const id = req.params.id;
         const query ={_id: ObjectId(id)};
         const product = await carCollection.findOne(query);
-        res.send(product);
+        res.send(product); 
     })
 
     /*==========Post Data====================*/
@@ -52,7 +52,15 @@ try{
         res.send(result);
 
     })
-
+    /* =================put============== */
+    app.put('/inventory/:id', async (req,res)=>{
+        const id = req.params.id;
+        const updateQuantity= req.body;
+        console.log(updateQuantity);
+        const query ={_id: ObjectId(id)};
+      
+        res.send(deleteItem);
+    })
 
     /*===================Delete======================*/
 
